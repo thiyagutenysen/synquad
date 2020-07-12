@@ -1,0 +1,7 @@
+{
+    "name":"laikago",
+    "init_pos":[0,0,0.5],
+    "init_ori":[0,0.5,0.5,0],
+    "urdf_path":"/robots/laikago/laikago_toes.urdf"
+
+}
