@@ -5,7 +5,8 @@ import time
 from quadruped import QuadrupedRobot
 import json
 robot_name_to_json = {
-	'stoch':'stoch.json'
+	'stoch':'stoch.json',
+	'laikago':'laikago.json'
 }
 class World:
 	def __init__(self, render = True, gravity=-9.8, frame_count=25):
@@ -38,6 +39,6 @@ class World:
 
 if(__name__ == "__main__"):
 	world = World()
-	world.load_robot('stoch')
+	world.load_robot('laikago')
 	while True:
 		world.sim()

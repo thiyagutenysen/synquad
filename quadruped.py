@@ -11,7 +11,7 @@ class QuadrupedRobot():
         pass
 
 if(__name__ == "__main__"):
-    with open("stoch.json") as f:
+    with open("laikago.json") as f:
         data = json.load(f)
     stoch = QuadrupedRobot(data)
     print(stoch.init_pos)
