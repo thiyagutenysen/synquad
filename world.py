@@ -2,6 +2,11 @@ import pybullet
 import pybullet_data
 import bullet_client
 import time
+from quadruped import QuadrupedRobot
+import json
+robot_name_to_json = {
+	'stoch':'stoch.json'
+}
 class World:
 	def __init__(self, render = True, gravity=-9.8, frame_count=25):
 		if(render):
@@ -20,8 +25,19 @@ class World:
 		for i in range(self.frames):
 			self._pybullet_client.stepSimulation()
 			time.sleep(1./240.)
+		pass
 
+	def load_robot(self, name):
+		json_path = robot_name_to_json[name]
+		with open(json_path) as f:
+			data = json.load(f)
+		robot = QuadrupedRobot(data)
+		robot.id = self._pybullet_client.loadURDF(robot.urdf_path, robot.init_pos, robot.init_ori)
+		robot.pyb = self._pybullet_client
+		pass
 
 if(__name__ == "__main__"):
 	world = World()
-	world.sim()
+	world.load_robot('stoch')
+	while True:
+		world.sim()

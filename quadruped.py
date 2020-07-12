@@ -6,6 +6,8 @@ class QuadrupedRobot():
         self.urdf_path = os.path.realpath('')+ data['urdf_path']
         self.init_pos = data['init_pos']
         self.init_ori = data['init_ori']
+        self.id = 0
+        self.pyb=0
         pass
 
 if(__name__ == "__main__"):
