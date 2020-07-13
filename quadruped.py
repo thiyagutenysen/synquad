@@ -2,6 +2,8 @@ import sys, os
 import json
 from simulation import SimulationInterface
 from actuator import Default
+from inverse_kinematics import InverseKinematics, FiveBarLinkage
+ik_name_to_class_name={'Five-Bar':FiveBarLinkage}
 class QuadrupedRobot():
     """
     The goal of this class is to simply store data pertaining to the quadruped robot.
@@ -14,6 +16,7 @@ class QuadrupedRobot():
         self.sim = SimulationInterface(data)
         if(data['motor_model']['type'] == "Default"):
             self.motor = Default(data['motor_model'])
+        self.ik = ik_name_to_class_name[data['IK']['type']](data['IK'])
         pass
     
     def apply_pd_control(self, des_pos, des_vel):
