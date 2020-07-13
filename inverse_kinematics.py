@@ -97,7 +97,7 @@ class FiveBarLinkage(InverseKinematics):
         motor_knee, motor_hip, _, _ = self._inverse_stoch2(new_coords[0], -new_coords[1])
         motor_hip = motor_hip + self.motor_offsets[0]
         motor_knee = motor_knee + self.motor_offsets[1]
-        return [motor_knee, motor_hip, theta]
+        return [motor_hip, motor_knee, theta]
 
 
 if(__name__ == "__main__"):
@@ -111,4 +111,4 @@ if(__name__ == "__main__"):
     with open(robot_name_to_json['stoch'])as f:
         data = json.load(f)
     ik = FiveBarLinkage(data['IK'])
-    print(ik.solve(0.1, - 0.243, 0))
+    print(ik.solve(0.068, - 0.243, 0))

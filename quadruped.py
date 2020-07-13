@@ -1,9 +1,12 @@
 import sys, os
 import json
+import numpy as np
 from simulation import SimulationInterface
 from actuator import Default
 from inverse_kinematics import InverseKinematics, FiveBarLinkage
-ik_name_to_class_name={'Five-Bar':FiveBarLinkage}
+from controller import Controller
+ik_name_to_class={'Five-Bar':FiveBarLinkage}
+motor_name_to_class={'Default':Default}
 class QuadrupedRobot():
     """
     The goal of this class is to simply store data pertaining to the quadruped robot.
@@ -14,16 +17,26 @@ class QuadrupedRobot():
         self.init_pos = data['init_pos']
         self.init_ori = data['init_ori']
         self.sim = SimulationInterface(data)
-        if(data['motor_model']['type'] == "Default"):
-            self.motor = Default(data['motor_model'])
-        self.ik = ik_name_to_class_name[data['IK']['type']](data['IK'])
+        self.motor = motor_name_to_class[data['motor_model']['type']](data['motor_model'])
+        self.ik = ik_name_to_class[data['IK']['type']](data['IK'])
+        self.controller = Controller(data)
         pass
     
     def apply_pd_control(self, des_pos, des_vel):
         current_ang = self.sim.get_motor_angles()
-        current_vel = self.sim.get_motor_vel()
+        current_vel = self.sim.get_motor_velocities()
         motor_torque = self.motor.calc_torque(des_pos, des_vel, current_ang, current_vel)
         self.sim.apply_torque(motor_torque)
+        pass
+    
+    def apply_control_step(self, input = 0):
+        pts = self.controller.command()
+        pts = np.array(pts)
+        motor_hip, motor_knee, motor_abd = self.ik.solve(pts[0],pts[1],pts[2])
+        final_pos = [motor_hip,motor_knee]*4+[motor_abd]*4
+        final_pos = np.array(final_pos)
+        vel = np.zeros(12)
+        self.apply_pd_control(final_pos, vel)
         pass
     
 

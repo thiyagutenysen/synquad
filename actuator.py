@@ -5,7 +5,7 @@ class Default:
 		self._kd = data['kd']
 		pass
 	
-	def calc_torque(motor_pos_commands, motor_vel_commands, current_pos, current_vel):
+	def calc_torque(self, motor_pos_commands, motor_vel_commands, current_pos, current_vel):
 		applied_motor_torque = self._kp * (motor_pos_commands - current_pos) + self._kd * (motor_vel_commands - current_vel)
 		return applied_motor_torque
 	
