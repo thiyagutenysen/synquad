@@ -111,4 +111,4 @@ if(__name__ == "__main__"):
     with open(robot_name_to_json['stoch'])as f:
         data = json.load(f)
     ik = FiveBarLinkage(data['IK'])
-    print(ik.solve(0.068, - 0.243, 0))
+    print(ik.solve(0.05, - 0.243, 0))

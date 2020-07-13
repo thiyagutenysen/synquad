@@ -29,6 +29,8 @@ class World:
 		for i in range(self.frames):
 			robot.apply_control_step()
 			self._pybullet_client.stepSimulation()
+			# time.sleep(10./240)
+
 		pass
 
 	def load_robot(self, name, on_rack = False):

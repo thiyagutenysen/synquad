@@ -15,11 +15,14 @@ class Controller():
 		pass
 	def command(self):
 		"""For now a very simple Circular Controller"""
-		omega = 2*100*2.5
-		r = 0.068
-		x = np.cos(np.pi*self._theta/no_of_points)*r
-		y = np.sin(np.pi*self._theta/no_of_points)*r-0.243
-		self._theta = constrain_theta(omega * self.dt + self._theta)
+		omega = 1
+		a = 0.068*1.5
+		b = 0.04*2
+		x = -1*np.cos(np.pi*self._theta/no_of_points)*a
+		y = np.sin(np.pi*self._theta/no_of_points)*b-0.243
+		if(y<-0.243):
+			y = -0.243
+		self._theta = constrain_theta(0.1 + self._theta)
 		return [x,y,0]
 
 	def reset():
