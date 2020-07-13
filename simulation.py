@@ -3,6 +3,7 @@ import pybullet
 class SimulationInterface():
 	""" This class controls the robot in pybullet simulation """
 	def __init__(self, data):
+		self.name = data['name']
 		self.motor_names = data['motor_names']
 		self.reset_pos = data['init_pos']
 		self.reset_ori = data['init_ori']
@@ -25,6 +26,7 @@ class SimulationInterface():
 			joint_info = self._client.getJointInfo(self.id, i)
 			joint_name_to_id[joint_info[1].decode("UTF-8")] = joint_info[0]
 		motor_id_list = [joint_name_to_id[motor_name] for motor_name in self.motor_names]
+		self.add_constraints(joint_name_to_id)
 		return motor_id_list
 	
 	def apply_torque(self, torques):
@@ -50,6 +52,24 @@ class SimulationInterface():
 		for motor_id in self._motor_id_list:
 			self._client.resetJointState(self.id,motor_id,targetValue = self.reset_angles[i], targetVelocity=0)
 			i=i+1
+		pass
+	
+	def on_rack(self):
+		self._client.createConstraint(
+				self.id, -1, -1, -1, self._client.JOINT_FIXED,
+				[0, 0, 0], [0,0,0], [0,0,1])
+		pass
+
+	def add_constraints(self, joint_name_to_id):
+		if(self.name=='Stoch'):
+			legs = ['fl_', 'fr_', 'bl_', 'br_']
+			for leg in legs:
+				c = self._client.createConstraint(
+						self.id, joint_name_to_id[leg + "lower_hip_joint"],
+						self.id, joint_name_to_id[leg + "lower_knee_joint"],
+						self._client.JOINT_POINT2POINT, [0, 0, 0],
+						[0.014, 0, 0.076], [0.0,0.0,-0.077])
+				self._client.changeConstraint(c, maxForce=200)
 		pass
 
 
