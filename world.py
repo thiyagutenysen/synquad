@@ -25,13 +25,13 @@ class World:
 		self.frames = frame_count
 		pass
 
-	def sim(self):
+	def sim(self, robot):
 		for i in range(self.frames):
+			robot.apply_control_step()
 			self._pybullet_client.stepSimulation()
-			time.sleep(1./240.)
 		pass
 
-	def load_robot(self, name):
+	def load_robot(self, name, on_rack = False):
 		json_path = robot_name_to_json[name]
 		with open(json_path) as f:
 			data = json.load(f)
@@ -39,10 +39,12 @@ class World:
 		r_id = self._pybullet_client.loadURDF(robot.urdf_path, robot.init_pos, robot.init_ori)
 		robot.sim.set_pybullet_client(self._pybullet_client, r_id)
 		robot.sim.reset()
-		pass
+		if(on_rack):
+			robot.sim.on_rack()
+		return robot
 
 if(__name__ == "__main__"):
 	world = World()
-	world.load_robot('hyq')
+	robot = world.load_robot('stoch', on_rack = True)
 	while True:
-		world.sim()
+		world.sim(robot)
