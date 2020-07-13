@@ -24,7 +24,6 @@ class SimulationInterface():
 		for i in range(num_joints):
 			joint_info = self._client.getJointInfo(self.id, i)
 			joint_name_to_id[joint_info[1].decode("UTF-8")] = joint_info[0]
-		
 		motor_id_list = [joint_name_to_id[motor_name] for motor_name in self.motor_names]
 		return motor_id_list
 	

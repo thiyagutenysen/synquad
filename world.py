@@ -5,8 +5,11 @@ import time
 from quadruped import QuadrupedRobot
 import json
 robot_name_to_json = {
-	'stoch':'stoch.json',
-	'laikago':'laikago.json'
+	'stoch':'robots/stoch_two_abduction_urdf/stoch.json',
+	'laikago':'robots/laikago/laikago.json',
+	'mini_cheetah':'robots/mini_cheetah/mini_cheetah.json',
+	'hyq':'robots/hyq/hyq.json',
+	'minitaur':'robots/minitaur/minitaur.json'
 }
 class World:
 	def __init__(self, render = True, gravity=-9.8, frame_count=25):
@@ -33,12 +36,13 @@ class World:
 		with open(json_path) as f:
 			data = json.load(f)
 		robot = QuadrupedRobot(data)
-		robot.id = self._pybullet_client.loadURDF(robot.urdf_path, robot.init_pos, robot.init_ori)
-		robot.pyb = self._pybullet_client
+		r_id = self._pybullet_client.loadURDF(robot.urdf_path, robot.init_pos, robot.init_ori)
+		robot.sim.set_pybullet_client(self._pybullet_client, r_id)
+		robot.sim.reset()
 		pass
 
 if(__name__ == "__main__"):
 	world = World()
-	world.load_robot('laikago')
+	world.load_robot('hyq')
 	while True:
 		world.sim()

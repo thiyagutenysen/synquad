@@ -1,6 +1,0 @@
-{
-    "name":"Stoch",
-    "init_pos":[0,0,0.5],
-    "init_ori":[0,0.5,0.5,0],
-    "urdf_path":"/urdf/laikago/laikago_toes.urdf"
-}

@@ -1,6 +1,0 @@
-{
-    "name":"Stoch",
-    "init_pos":[0,0,0.29],
-    "init_ori":[0,0,0,1],
-    "urdf_path":"/urdf/stoch_two_abduction_urdf/urdf/stoch_two_abduction_urdf.urdf"
-}

@@ -1,6 +1,24 @@
 {
     "name":"Stoch",
-    "init_pos":[0,0,0.29],
+    "init_pos":[0,0,0.28],
     "init_ori":[0,0,0,1],
-    "urdf_path":"/robots/stoch_two_abduction_urdf/urdf/stoch_two_abduction_urdf.urdf"
+    "init_angles":[0,0,0,0,0,0,0,0,0,0,0,0],
+    "urdf_path":"/robots/stoch_two_abduction_urdf/urdf/stoch_two_abduction_urdf.urdf",
+    "motor_names":[ "motor_fl_hip_joint",
+                    "motor_fl_knee_joint",
+                    "motor_fr_hip_joint",
+                    "motor_fr_knee_joint",
+                    "motor_bl_hip_joint",
+                    "motor_bl_knee_joint",
+                    "motor_br_hip_joint",
+                    "motor_br_knee_joint",
+                    "motor_fl_abd_joint",
+                    "motor_fr_abd_joint",
+                    "motor_bl_abd_joint",
+                    "motor_br_abd_joint"],
+    "motor_model":{
+        "type":"Default",
+        "kp":20,
+        "kd":2
+    }
 }
