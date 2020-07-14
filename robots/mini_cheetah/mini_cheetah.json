@@ -1,8 +1,10 @@
 {
     "name":"MiniCheetah",
-    "init_pos":[0,0,0.315],
+    "init_pos":[0,0,0.515],
     "init_ori":[0,0,0,1],
     "init_angles":[0.7,-1.4,0.7,-1.4,0.7,-1.4,0.7,-1.4,0,0,0,0],
+    "body_width":0.27,
+    "body_length":0.48,
     "urdf_path":"/robots/mini_cheetah/mini_cheetah.urdf",
     "motor_names":[ "abduct_fl_to_thigh_fl_j",
         "thigh_fl_to_knee_fl_j",
@@ -20,5 +22,22 @@
         "type":"Default",
         "kp":20,
         "kd":2
+    },
+    "IK":{
+        "type":"Spatial_Linkage",
+        "link_lengths":[0.25,0.25],
+        "motor_offsets":{
+            "FL":{"hip":1.57,"knee":0,"abd":0},
+            "FR":{"hip":1.57,"knee":0,"abd":0},
+            "BL":{"hip":1.57,"knee":0,"abd":0},
+            "BR":{"hip":1.57,"knee":0,"abd":0}
+        },
+        "motor_dir":{
+            "FL":{"hip":1,"knee":1,"abd":1},
+            "FR":{"hip":1,"knee":1,"abd":-1},
+            "BL":{"hip":1,"knee":1,"abd":1},
+            "BR":{"hip":1,"knee":1,"abd":-1}
+        },
+        "sol_branch":{"FL":1, "FR":1, "BL":1, "BR":1}
     }
 }

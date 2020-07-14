@@ -3,9 +3,9 @@ import json
 import numpy as np
 from simulation import SimulationInterface
 from actuator import Default
-from inverse_kinematics import InverseKinematics, FiveBarLinkage
+from inverse_kinematics import InverseKinematics, FiveBarLinkage, SpatialLinkage
 from controller import Controller
-ik_name_to_class={'Five-Bar':FiveBarLinkage}
+ik_name_to_class={'Five-Bar':FiveBarLinkage,'Spatial_Linkage':SpatialLinkage}
 motor_name_to_class={'Default':Default}
 class QuadrupedRobot():
     """
@@ -31,9 +31,8 @@ class QuadrupedRobot():
     
     def apply_control_step(self, input = 0):
         pts = self.controller.command()
-        pts = np.array(pts)
-        motor_hip, motor_knee, motor_abd = self.ik.solve(pts[0],pts[1],pts[2])
-        final_pos = [motor_hip,motor_knee]*4+[motor_abd]*4
+        final_pos = self.ik.solve(pts)
+        # final_pos = [motor_hip,motor_knee]*4+[motor_abd]*4
         final_pos = np.array(final_pos)
         vel = np.zeros(12)
         self.apply_pd_control(final_pos, vel)

@@ -1,10 +1,22 @@
 import numpy as np
 import json
+from numpy import cos,sin,sqrt
+def constrain_theta(thetas):
+    new_thetas = []
+    for theta in thetas:
+        theta = np.fmod(theta, 2*np.pi)
+        if(theta>np.pi):
+            theta = theta - 2*np.pi
+        if(theta < -np.pi):
+            theta = theta + 2*np.pi
+        new_thetas.append(theta)
+    return new_thetas
+
 class InverseKinematics():
     def __init__(self,data):
         self.link_lengths = data['link_lengths']
         self.motor_offsets = data['motor_offsets']
-        self.motor_scale = data['motor_directions']
+        self.motor_scale = data['motor_dir']
         pass
     def solve(self, x,y,z):
         """ This function will return the angles, given a certain x,y,z value. It is an inverse kinematics solver"""
@@ -99,6 +111,53 @@ class FiveBarLinkage(InverseKinematics):
         motor_knee = motor_knee + self.motor_offsets[1]
         return [motor_hip, motor_knee, theta]
 
+class SpatialLinkage(InverseKinematics):
+    def __init__(self,data):
+        super(SpatialLinkage, self).__init__(data)
+        self.sol_branch = data['sol_branch']
+        self.name = data['type']
+        pass
+    
+    def _inverse_2D(self,x,y,sol_branch = 1):
+        l1 = self.link_lengths[0]
+        l2 = self.link_lengths[1]
+        t1 = (-4*l2*y + sqrt(16*l2**2*y**2 - 4*(-l1**2 + l2**2 - 2*l2*x + x**2 + y**2)*(-l1**2 + l2**2 + 2*l2*x + x**2 + y**2)))/(2.*(l1**2 - l2**2 - 2*l2*x - x**2 - y**2))
+        t2 = (-4*l2*y - sqrt(16*l2**2*y**2 - 4*(-l1**2 + l2**2 - 2*l2*x + x**2 + y**2)*(-l1**2 + l2**2 + 2*l2*x + x**2 + y**2)))/(2.*(l1**2 - l2**2 - 2*l2*x - x**2 - y**2))
+        if(sol_branch):
+            t = t2
+        else:
+            t = t1
+        th12 = np.arctan2(2*t,(1-t**2))
+        th1 = np.arctan2(y - l2*sin(th12), x - l2*cos(th12))
+        th2 = th12 - th1
+        return [th1,th2]
+    
+    def _forward_2D(self,th1,th2):
+        l1 = self.link_lengths[0]
+        l2 = self.link_lengths[1]
+        x = l1 * cos(th1) + l2 * cos(th1+th2)
+        y = l1 * sin(th1) + l2 * sin(th1+th2)
+        return [x,y]
+
+    def solve(self, pts):
+        motor_ang=[]
+        motor_abd = []
+        leg_list = ['FL','FR','BL','BR']
+        for leg in leg_list:
+            x,y,z=pts[leg]
+            theta = np.arctan2(z,-y)
+            new_coords = np.array([x,y/np.cos(theta),z])
+            motor_hip, motor_knee = self._inverse_2D(new_coords[0], new_coords[1],sol_branch=self.sol_branch[leg])
+            motor_hip =  (motor_hip + self.motor_offsets[leg]['hip'])*self.motor_scale[leg]['hip']
+            motor_knee =  (motor_knee+self.motor_offsets[leg]['knee'])*self.motor_scale[leg]['knee']
+            theta = (theta+self.motor_offsets[leg]['abd'])*self.motor_scale[leg]['abd']
+            motor_ang.append(motor_hip)
+            motor_ang.append(motor_knee)
+            motor_abd.append(theta)
+        final_motor_angles = motor_ang+motor_abd
+        return final_motor_angles
+
+    
 
 if(__name__ == "__main__"):
     robot_name_to_json = {
@@ -108,7 +167,21 @@ if(__name__ == "__main__"):
 	'hyq':'robots/hyq/hyq.json',
 	'minitaur':'robots/minitaur/minitaur.json'
     }
-    with open(robot_name_to_json['stoch'])as f:
+    with open(robot_name_to_json['mini_cheetah'])as f:
         data = json.load(f)
-    ik = FiveBarLinkage(data['IK'])
-    print(ik.solve(0.05, - 0.243, 0))
+    # ik = FiveBarLinkage(data['IK'])
+    # print(ik.solve(0.05, - 0.243, 0))
+    ik = SpatialLinkage(data['IK'])
+    ik.link_lengths = np.array([0.25,0.25])
+    th1 = 0
+    th2 = 0
+    x,y = ik._forward_2D(th1,th2)
+    th1_, th2_ = ik._inverse_2D(x,y)
+    newx, newy = ik._forward_2D(th1_, th2_)
+    print(x,y,newx,newy)
+    th1_, th2_,th3_ = ik.solve(0.0,-0.5,0.0)
+    th1, th2 = ik._inverse_2D(0.0,-0.001)
+    print(th1_,th2_,th3_)
+    print(th1,th2)
+
+    pass

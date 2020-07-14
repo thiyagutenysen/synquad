@@ -18,12 +18,17 @@ class Controller():
 		omega = 1
 		a = 0.068*1.5
 		b = 0.04*2
+		a = 0.1
+		b = 0.1
 		x = -1*np.cos(np.pi*self._theta/no_of_points)*a
-		y = np.sin(np.pi*self._theta/no_of_points)*b-0.243
-		if(y<-0.243):
-			y = -0.243
+		y = np.sin(np.pi*self._theta/no_of_points)*b-0.3
+		# if(y<-0.243):
+		# 	y = -0.243
 		self._theta = constrain_theta(0.1 + self._theta)
-		return [x,y,0]
+		final = [0.4, -0.1, 0.0]
+		final = [x,y,0]
+		final_pts= {'FL':final,'FR':final,'BL':final,'BR':final}
+		return final_pts
 
 	def reset():
 		self._theta = 0
