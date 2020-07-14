@@ -1,8 +1,10 @@
 {
     "name":"hyq",
-    "init_pos":[0,0,0.64],
+    "init_pos":[0,0,0.84],
     "init_ori":[0,0,0,1],
     "init_angles":[0.7,-1.4,0.7,-1.4,-0.7,1.4,-0.7,1.4,0,0,0,0],
+    "body_width":0.414,
+    "body_length":0.717,
     "urdf_path":"/robots/hyq/hyq.urdf",
     "motor_names":[ "lf_hfe_joint",
         "lf_kfe_joint",
@@ -20,5 +22,23 @@
         "type":"Default",
         "kp":20,
         "kd":2
+    },
+    "IK":{
+        "type":"Spatial_Linkage",
+        "link_lengths":[0.5,0.5],
+        "motor_offsets":{
+            "FL":{"hip":1.57,"knee":0,"abd":0},
+            "FR":{"hip":1.57,"knee":0,"abd":0},
+            "BL":{"hip":1.57,"knee":0,"abd":0},
+            "BR":{"hip":1.57,"knee":0,"abd":0}
+        },
+        "motor_dir":{
+            "FL":{"hip":1,"knee":1,"abd":-1},
+            "FR":{"hip":1,"knee":1,"abd":-1},
+            "BL":{"hip":1,"knee":1,"abd":-1},
+            "BR":{"hip":1,"knee":1,"abd":-1}
+        },
+        "sol_branch":{"FL":0, "FR":0, "BL":1, "BR":1}
     }
 }
+
