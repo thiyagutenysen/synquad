@@ -4,9 +4,10 @@ import numpy as np
 from simulation import SimulationInterface
 from actuator import Default
 from inverse_kinematics import InverseKinematics, FiveBarLinkage, SpatialLinkage
-from controller import Controller
+from controller import Controller, ClassicPositionController
 ik_name_to_class={'Five-Bar':FiveBarLinkage,'Spatial_Linkage':SpatialLinkage}
 motor_name_to_class={'Default':Default}
+controller_name_to_class={'Classic':ClassicPositionController}
 class QuadrupedRobot():
     """
     The goal of this class is to simply store data pertaining to the quadruped robot.
@@ -19,7 +20,8 @@ class QuadrupedRobot():
         self.sim = SimulationInterface(data)
         self.motor = motor_name_to_class[data['motor_model']['type']](data['motor_model'])
         self.ik = ik_name_to_class[data['IK']['type']](data['IK'])
-        self.controller = Controller(data)
+        self.controller = controller_name_to_class[data['controller']['type']](data['controller'])
+        self.joy_input = [0.3,1]
         pass
     
     def apply_pd_control(self, des_pos, des_vel):
@@ -30,7 +32,7 @@ class QuadrupedRobot():
         pass
     
     def apply_control_step(self, input = 0):
-        pts = self.controller.command()
+        pts = self.controller.command(self.joy_input)
         final_pos = self.ik.solve(pts)
         # final_pos = [motor_hip,motor_knee]*4+[motor_abd]*4
         final_pos = np.array(final_pos)

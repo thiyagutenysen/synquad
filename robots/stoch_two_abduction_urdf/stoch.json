@@ -3,8 +3,6 @@
     "init_pos":[0,0,0.28],
     "init_ori":[0,0,0,1],
     "init_angles":[0,0,0,0,0,0,0,0,0,0,0,0],
-    "body_width":0.24,
-    "body_length":0.37,
     "urdf_path":"/robots/stoch_two_abduction_urdf/urdf/stoch_two_abduction_urdf.urdf",
     "motor_names":[ "motor_fl_hip_joint",
                     "motor_fl_knee_joint",
@@ -38,5 +36,15 @@
             "BL":{"hip":1,"knee":1,"abd":1},
             "BR":{"hip":1,"knee":1,"abd":1}
         }
-    }
+    },
+    "controller":{
+        "type":"Classic",
+        "body_width":0.24,
+        "body_length":0.37,
+        "pts":[[-0.068,-0.24],[-0.115,-0.24],[-0.065,-0.145],[0.065,-0.145],[0.115,-0.24],[0.068,-0.24]],
+        "step_length":0.136,
+        "step_height":0.24,
+        "phase":{"FL":0,"FR":100,"BL":0,"BR":100}
+        }
+
 }

@@ -13,7 +13,7 @@ class Controller():
 		self.body_width = data['body_width']
 		self.dt = 0.005
 		pass
-	def command(self):
+	def command(self, args = 0):
 		"""For now a very simple Circular Controller"""
 		omega = 1
 		a = 0.068*1.5
@@ -57,12 +57,12 @@ class ClassicPositionController(Controller):
 		self.front_right = leg_data('FR')
 		self.back_left = leg_data('BL')
 		self.back_right = leg_data('BR')
-		self._pts = np.array([[-0.068,-0.24],[-0.115,-0.24],[-0.065,-0.145],[0.065,-0.145],[0.115,-0.24],[0.068,-0.24]])
-		self.step_length = 0.068*2
+		self._pts = np.array(data['pts'])
+		self.step_length = data['step_length']
 		self.weights = np.array([1,1,1,1,1,1])
 		self.no_of_points = 100
 		self._phase = data['phase']
-		self.gait_height = 0.24
+		self.step_height = data['step_height']
 		pass
 
 	def _update_leg_theta(self,theta):
@@ -138,10 +138,11 @@ class ClassicPositionController(Controller):
 		if(t<1):
 			return drawCurve(newpoints, weights, t)
 		if(t>=1):
-			return [points[-1,0]+ (t-1)*(points[0,0] - points[-1,0]), -1*self.gait_height]
+			return [points[-1,0]+ (t-1)*(points[0,0] - points[-1,0]), -1*self.step_height]
 	
 
-	def command(self, radius, scale):
+	def command(self, args=0):
+		radius, scale = args
 		legs = [self.front_left, self.front_right, self.back_left, self.back_right]
 		pts = {}
 		x= []
@@ -167,7 +168,7 @@ class ClassicPositionController(Controller):
 			leg.x = leg.x * scale 
 			leg.z = leg.z * scale 
 			pts[leg.name] = [leg.x, leg.y, leg.z]	
-		self._theta = constrain_theta(0.1 + self._theta)
+		self._theta = constrain_theta(0.2 + self._theta)
 		return pts
 	
 

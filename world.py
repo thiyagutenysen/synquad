@@ -9,7 +9,8 @@ robot_name_to_json = {
 	'laikago':'robots/laikago/laikago.json',
 	'mini_cheetah':'robots/mini_cheetah/mini_cheetah.json',
 	'hyq':'robots/hyq/hyq.json',
-	'minitaur':'robots/minitaur/minitaur.json'
+	'minitaur':'robots/minitaur/minitaur.json',
+	'littleDog':'robots/littledog/littleDog.json'
 }
 class World:
 	def __init__(self, render = True, gravity=-9.8, frame_count=25):
@@ -40,6 +41,10 @@ class World:
 		robot = QuadrupedRobot(data)
 		r_id = self._pybullet_client.loadURDF(robot.urdf_path, robot.init_pos, robot.init_ori)
 		robot.sim.set_pybullet_client(self._pybullet_client, r_id)
+		FOOT_LINK_ID = [3,8,14,19]
+		for link_id in FOOT_LINK_ID:
+			self._pybullet_client.changeDynamics(
+			robot.sim.id, link_id, lateralFriction=0.6)
 		robot.sim.reset()
 		if(on_rack):
 			robot.sim.on_rack()
@@ -47,7 +52,7 @@ class World:
 
 if(__name__ == "__main__"):
 	world = World()
-	robot = world.load_robot('stoch', on_rack = True)
+	robot = world.load_robot('stoch', on_rack = False)
 	while True:
 		world.sim(robot)
 		pass
