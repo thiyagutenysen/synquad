@@ -27,7 +27,7 @@ class Controller():
 		self._theta = constrain_theta(0.1 + self._theta)
 		#For HyQ use 0.05, rest use 0.1
 		final = [0.4, -0.1, 0.0]
-		final = [x,y,0]
+		final = [0.05,-0.155,0.0]
 		final_pts= {'FL':final,'FR':final,'BL':final,'BR':final}
 		return final_pts
 
