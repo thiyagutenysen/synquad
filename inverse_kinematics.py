@@ -167,7 +167,19 @@ class SpatialLinkage(InverseKinematics):
         final_motor_angles = motor_ang+motor_abd
         return final_motor_angles
 
+class FiveBarParellelLinkage(InverseKinematics):
+    def __init__(self):    
+        super(SpatialLinkage, self).__init__(data)
+        self.name = data['type']
+        pass
     
+    def __inverse_2D(self,x,y):
+        l1 = self.link_lengths[0]
+        l2 = self.link_lengths[1]
+        L = np.sqrt(x**2 + y**2)
+        psi = np.asin(x/L)
+        phi = np.acos((l1**2 + l2**2 - L**2)/(2*l1*l))
+        return [th1,th2]
 
 if(__name__ == "__main__"):
     robot_name_to_json = {

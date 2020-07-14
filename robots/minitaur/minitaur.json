@@ -2,6 +2,8 @@
     "name":"minitaur",
     "init_pos":[0,0,0.4],
     "init_ori":[0,0,0,1],
+    "body_width":0.3,
+    "body_length":0.45,
     "urdf_path":"/robots/minitaur/minitaur.urdf",
     "motor_names":[ "motor_fl_hip_joint",
         "motor_fl_knee_joint",
@@ -19,5 +21,21 @@
     "type":"Default",
     "kp":20,
     "kd":2
+    },
+    "IK":{
+        "type":"Five_Bar_Parallel_Linkage",
+        "link_lengths":[0.1,0.2],
+        "motor_offsets":{
+            "FL":{"hip":0,"knee":0,"abd":0},
+            "FR":{"hip":0,"knee":0,"abd":0},
+            "BL":{"hip":0,"knee":0,"abd":0},
+            "BR":{"hip":0,"knee":0,"abd":0}
+        },
+        "motor_dir":{
+            "FL":{"hip":1,"knee":1,"abd":1},
+            "FR":{"hip":1,"knee":1,"abd":-1},
+            "BL":{"hip":1,"knee":1,"abd":1},
+            "BR":{"hip":1,"knee":1,"abd":-1}
+        },
     }
 }
