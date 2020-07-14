@@ -18,12 +18,12 @@ class Controller():
 		omega = 1
 		a = 0.068*1.5
 		b = 0.04*2
-		a = 0.15
-		b = 0.15
+		# a = 0.15
+		# b = 0.15
 		x = -1*np.cos(np.pi*self._theta/no_of_points)*a
-		y = np.sin(np.pi*self._theta/no_of_points)*b-0.5
-		# if(y<-0.243):
-		# 	y = -0.243
+		y = np.sin(np.pi*self._theta/no_of_points)*b-0.243
+		if(y<-0.243):
+			y = -0.243
 		self._theta = constrain_theta(0.1 + self._theta)
 		#For HyQ use 0.05, rest use 0.1
 		final = [0.4, -0.1, 0.0]

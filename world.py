@@ -47,7 +47,7 @@ class World:
 
 if(__name__ == "__main__"):
 	world = World()
-	robot = world.load_robot('hyq', on_rack = True)
+	robot = world.load_robot('stoch', on_rack = True)
 	while True:
 		world.sim(robot)
 		pass

@@ -103,13 +103,23 @@ class FiveBarLinkage(InverseKinematics):
 
         return [q1,q2]
     
-    def solve(self, x,y,z):
-        theta = np.arctan2(z,-y)
-        new_coords = np.array([x,-y/np.cos(theta) - 0.035,z])
-        motor_knee, motor_hip, _, _ = self._inverse_stoch2(new_coords[0], -new_coords[1])
-        motor_hip = motor_hip + self.motor_offsets[0]
-        motor_knee = motor_knee + self.motor_offsets[1]
-        return [motor_hip, motor_knee, theta]
+    def solve(self, pts):
+        motor_abd = []
+        motor_ang = []
+        leg_list=['FL','FR','BL','BR']
+        for leg in leg_list:
+            x,y,z = pts[leg]
+            theta = np.arctan2(z,-y)
+            new_coords = np.array([x,-y/np.cos(theta) - 0.035,z])
+            motor_knee, motor_hip, _, _ = self._inverse_stoch2(new_coords[0], -new_coords[1])
+            motor_hip = (motor_hip + self.motor_offsets[leg]['hip'])*self.motor_scale[leg]['hip']
+            motor_knee = (motor_knee + self.motor_offsets[leg]['knee'])*self.motor_scale[leg]['knee']
+            theta = (theta + self.motor_offsets[leg]['abd'])*self.motor_scale[leg]['abd']
+            motor_ang.append(motor_hip)
+            motor_ang.append(motor_knee)
+            motor_abd.append(theta)
+        final_motor_angles = motor_ang+motor_abd
+        return final_motor_angles
 
 class SpatialLinkage(InverseKinematics):
     def __init__(self,data):
