@@ -27,10 +27,10 @@ class World:
 		pass
 
 	def sim(self, robot):
+		robot.update_control_step()
 		for i in range(self.frames):
-			robot.apply_control_step()
+			robot.apply_pd_control()
 			self._pybullet_client.stepSimulation()
-			# time.sleep(10./240)
 
 		pass
 

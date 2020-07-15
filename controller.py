@@ -143,7 +143,7 @@ class ClassicPositionController(Controller):
 
 	def command(self, args=0):
 		radius, scale = args
-		legs = [self.front_left, self.front_right, self.back_left, self.back_right]
+		legs = [self.front_right, self.front_left, self.back_right, self.back_left]
 		pts = {}
 		x= []
 		y = []
@@ -168,7 +168,7 @@ class ClassicPositionController(Controller):
 			leg.x = leg.x * scale 
 			leg.z = leg.z * scale 
 			pts[leg.name] = [leg.x, leg.y, leg.z]	
-		self._theta = constrain_theta(0.2 + self._theta)
+		self._theta = constrain_theta(2.5 + self._theta)
 		return pts
 	
 

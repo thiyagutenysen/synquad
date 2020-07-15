@@ -21,24 +21,30 @@ class QuadrupedRobot():
         self.motor = motor_name_to_class[data['motor_model']['type']](data['motor_model'])
         self.ik = ik_name_to_class[data['IK']['type']](data['IK'])
         self.controller = controller_name_to_class[data['controller']['type']](data['controller'])
-        self.joy_input = [0.3,1]
+        self.joy_input = [-0.1,1]
+        self.motor_commands_pos = 0
+        self.motor_commands_vel = 0
         pass
     
-    def apply_pd_control(self, des_pos, des_vel):
+    def apply_pd_control(self, des_pos=0, des_vel=0):
+        if(des_pos == 0 and des_vel == 0):
+            des_pos = self.motor_commands_pos
+            des_vel = self.motor_commands_vel
         current_ang = self.sim.get_motor_angles()
         current_vel = self.sim.get_motor_velocities()
         motor_torque = self.motor.calc_torque(des_pos, des_vel, current_ang, current_vel)
         self.sim.apply_torque(motor_torque)
         pass
     
-    def apply_control_step(self, input = 0):
-        pts = self.controller.command(self.joy_input)
+    def update_control_step(self, inputs = 0):
+        if(inputs==0):
+            inputs = self.joy_input
+        pts = self.controller.command(inputs)
         final_pos = self.ik.solve(pts)
-        # final_pos = [motor_hip,motor_knee]*4+[motor_abd]*4
-        final_pos = np.array(final_pos)
-        vel = np.zeros(12)
-        self.apply_pd_control(final_pos, vel)
+        self.motor_commands_pos = np.array(final_pos)
+        self.motor_commands_vel = np.zeros(12)
         pass
+
     
 
 if(__name__ == "__main__"):
