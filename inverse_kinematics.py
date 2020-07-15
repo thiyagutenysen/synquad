@@ -161,11 +161,19 @@ class SpatialLinkage(InverseKinematics):
             motor_hip =  (motor_hip + self.motor_offsets[leg]['hip'])*self.motor_scale[leg]['hip']
             motor_knee =  (motor_knee+self.motor_offsets[leg]['knee'])*self.motor_scale[leg]['knee']
             theta = (theta+self.motor_offsets[leg]['abd'])*self.motor_scale[leg]['abd']
+            theta = self.constrain_abduction(theta)
             motor_ang.append(motor_hip)
             motor_ang.append(motor_knee)
             motor_abd.append(theta)
         final_motor_angles = motor_ang+motor_abd
         return final_motor_angles
+    
+    def constrain_abduction(self, angle):
+        if(angle < -0.125):
+            angle = -0.125
+        elif(angle > 0.35):
+            angle = 0.35
+        return angle
 
 class FiveBarParellelLinkage(InverseKinematics):
     def __init__(self):    
