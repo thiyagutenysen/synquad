@@ -21,7 +21,9 @@ class World:
 		self._pybullet_client.setPhysicsEngineParameter(numSolverIterations=int(300))
 		self._pybullet_client.setTimeStep(0.0002)
 		plane = self._pybullet_client.loadURDF("%s/plane.urdf" % pybullet_data.getDataPath())
+		self._pybullet_client.changeDynamics(plane,-1, lateralFriction=0.5)
 		self._pybullet_client.changeVisualShape(plane,-1,rgbaColor=[1,1,1,0.9])
+
 		self._pybullet_client.setGravity(0, 0, gravity)
 		self.frames = frame_count
 		pass
@@ -50,9 +52,11 @@ class World:
 			robot.sim.on_rack()
 		return robot
 
+
 if(__name__ == "__main__"):
 	world = World()
 	robot = world.load_robot('stoch', on_rack = False)
 	while True:
+		robot.joy_input = [0.3,2] 
 		world.sim(robot)
 		pass

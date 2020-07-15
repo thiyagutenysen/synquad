@@ -21,7 +21,7 @@ class QuadrupedRobot():
         self.motor = motor_name_to_class[data['motor_model']['type']](data['motor_model'])
         self.ik = ik_name_to_class[data['IK']['type']](data['IK'])
         self.controller = controller_name_to_class[data['controller']['type']](data['controller'])
-        self.joy_input = [0.3,1]
+        self.joy_input = [0.5,1.5]
         pass
     
     def apply_pd_control(self, des_pos, des_vel):
