@@ -21,7 +21,7 @@ class QuadrupedRobot():
         self.motor = motor_name_to_class[data['motor_model']['type']](data['motor_model'])
         self.ik = ik_name_to_class[data['IK']['type']](data['IK'])
         self.controller = controller_name_to_class[data['controller']['type']](self.parse_controller(data['controller']))
-        self.joy_input = [0.3,1]
+        self.joy_input = [-0.01,1]
         self.motor_commands_pos = 0
         self.motor_commands_vel = 0
         pass

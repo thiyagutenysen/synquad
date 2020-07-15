@@ -171,8 +171,6 @@ class ClassicPositionController(Controller):
 			pts[leg.name] = [leg.x, leg.y, leg.z]	
 		self._theta = constrain_theta(self.omega + self._theta)
 		return pts
-	
-
 if(__name__ == "__main__"):
 	data = {'body_length':10, 'body_width':10, 'phase':{'FL':0,'FR':0,'BL':0,'BR':0}}
 	c = ClassicPositionController(data)
