@@ -42,8 +42,8 @@ class World:
 		with open(json_path) as f:
 			data = json.load(f)
 		robot = QuadrupedRobot(data)
-		r_id = self._pybullet_client.loadURDF(robot.urdf_path, robot.init_pos, robot.init_ori)
-		robot.sim.set_pybullet_client(self._pybullet_client, r_id)
+		self.robot_id = self._pybullet_client.loadURDF(robot.urdf_path, robot.init_pos, robot.init_ori)
+		robot.sim.set_pybullet_client(self._pybullet_client, self.robot_id)
 		# FOOT_LINK_ID = [3,8,14,19]
 		# for link_id in FOOT_LINK_ID:
 		# 	self._pybullet_client.changeDynamics(
@@ -52,12 +52,12 @@ class World:
 		if(on_rack):
 			robot.sim.on_rack()
 		return robot
+	
 
 
 if(__name__ == "__main__"):
 	world = World()
-	robot = world.load_robot('stoch', on_rack = False)
+	robot = world.load_robot('anymal', on_rack = False)
 	while True:
-		robot.joy_input = [0.3,2] 
 		world.sim(robot)
 		pass

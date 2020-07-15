@@ -20,15 +20,11 @@ class QuadrupedRobot():
         self.sim = SimulationInterface(data)
         self.motor = motor_name_to_class[data['motor_model']['type']](data['motor_model'])
         self.ik = ik_name_to_class[data['IK']['type']](data['IK'])
-<<<<<<< HEAD
-        self.controller = controller_name_to_class[data['controller']['type']](data['controller'])
-        self.joy_input = [0.5,1.5]
-=======
+
         self.controller = controller_name_to_class[data['controller']['type']](self.parse_controller(data['controller']))
         self.joy_input = [1,1]
         self.motor_commands_pos = 0
         self.motor_commands_vel = 0
->>>>>>> master
         pass
     
     def apply_pd_control(self, des_pos=0, des_vel=0):
@@ -65,7 +61,7 @@ class QuadrupedRobot():
             sl = data['step_length']
             data['pts']=[[-sl/2, -sh], [-sl, -sh],[-sl/2, -0.6*sh],[sl/2, -0.6*sh],[sl, -sh],[sl/2, -sh]]
             pass
-        print(data)
+        #print(data)
         return data
     
 
