@@ -3,8 +3,6 @@
     "init_pos":[0,0,0.175],
     "init_ori":[0,0,0,1],
     "init_angles":[0.7,-1.4,0.7,-1.4,-0.7,1.4,-0.7,1.4 ,0,0,0,0],
-    "body_width":0.1,
-    "body_length":0.25,
     "urdf_path":"/robots/littledog/littleDog.urdf",
     "motor_names":[ "front_left_hip_pitch",
         "front_left_knee",
@@ -39,5 +37,15 @@
             "BR":{"hip":1,"knee":1,"abd":-1}
         },
         "sol_branch":{"FL":0, "FR":0, "BL":1, "BR":1}
-    }
+    },
+    "controller":{
+        "type":"Classic",
+        "body_width":0.1,
+        "body_length":0.25,
+        "pts":"Automatic",
+        "step_length":"Automatic",
+        "step_height":"Automatic",
+        "phase":{"FL":0,"FR":100,"BL":100,"BR":0},
+        "frequency":2.5
+        }
 }

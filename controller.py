@@ -63,6 +63,7 @@ class ClassicPositionController(Controller):
 		self.no_of_points = 100
 		self._phase = data['phase']
 		self.step_height = data['step_height']
+		self.omega = data['frequency']
 		pass
 
 	def _update_leg_theta(self,theta):
@@ -168,7 +169,7 @@ class ClassicPositionController(Controller):
 			leg.x = leg.x * scale 
 			leg.z = leg.z * scale 
 			pts[leg.name] = [leg.x, leg.y, leg.z]	
-		self._theta = constrain_theta(2.5 + self._theta)
+		self._theta = constrain_theta(self.omega + self._theta)
 		return pts
 	
 

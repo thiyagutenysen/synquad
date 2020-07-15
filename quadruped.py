@@ -20,8 +20,8 @@ class QuadrupedRobot():
         self.sim = SimulationInterface(data)
         self.motor = motor_name_to_class[data['motor_model']['type']](data['motor_model'])
         self.ik = ik_name_to_class[data['IK']['type']](data['IK'])
-        self.controller = controller_name_to_class[data['controller']['type']](data['controller'])
-        self.joy_input = [-0.1,1]
+        self.controller = controller_name_to_class[data['controller']['type']](self.parse_controller(data['controller']))
+        self.joy_input = [0.3,1]
         self.motor_commands_pos = 0
         self.motor_commands_vel = 0
         pass
@@ -45,6 +45,23 @@ class QuadrupedRobot():
         self.motor_commands_vel = np.zeros(12)
         pass
 
+    def parse_controller(self, data):
+        if(data['step_height']=="Automatic"):
+            data['step_height'] = round(self.ik._forward_2D(0.7, -1.4)[0],2)
+            pass
+        if(data['step_length']=="Automatic"):
+            sh = data['step_height']
+            ll = self.ik.link_lengths[0] + self.ik.link_lengths[1]
+            sl = np.sqrt(ll**2  - sh**2)
+            data['step_length'] = round(0.5*sl,2)
+            pass
+        if(data['pts'] == "Automatic"):
+            sh = data['step_height']
+            sl = data['step_length']
+            data['pts']=[[-sl/2, -sh], [-sl, -sh],[-sl/2, -0.6*sh],[sl/2, -0.6*sh],[sl, -sh],[sl/2, -sh]]
+            pass
+        print(data)
+        return data
     
 
 if(__name__ == "__main__"):
