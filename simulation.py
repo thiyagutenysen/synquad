@@ -48,7 +48,7 @@ class SimulationInterface():
 	def reset(self):
 		self._client.resetBasePositionAndOrientation(self.id, self.reset_pos, self.reset_ori)
 		self._client.resetBaseVelocity(self.id, [0, 0, 0], [0, 0, 0])
-		self._client.resetDebugVisualizerCamera(1,0,0, [0, 0, 0])
+		# self._client.resetDebugVisualizerCamera(1,0,0, [0, 0, 0])
 		i = 0
 		for motor_id in self._motor_id_list:
 			self._client.resetJointState(self.id,motor_id,targetValue = self.reset_angles[i], targetVelocity=0)

@@ -21,7 +21,7 @@ class QuadrupedRobot():
         self.motor = motor_name_to_class[data['motor_model']['type']](data['motor_model'])
         self.ik = ik_name_to_class[data['IK']['type']](data['IK'])
         self.controller = controller_name_to_class[data['controller']['type']](self.parse_controller(data['controller']))
-        self.joy_input = [-0.01,1]
+        self.joy_input = [1,1]
         self.motor_commands_pos = 0
         self.motor_commands_vel = 0
         pass
@@ -47,7 +47,7 @@ class QuadrupedRobot():
 
     def parse_controller(self, data):
         if(data['step_height']=="Automatic"):
-            data['step_height'] = round(self.ik._forward_2D(0.7, -1.4)[0],2)
+            data['step_height'] = round(self.ik._forward_2D(self.init_pos[0], self.init_pos[1])[0],2)
             pass
         if(data['step_length']=="Automatic"):
             sh = data['step_height']
